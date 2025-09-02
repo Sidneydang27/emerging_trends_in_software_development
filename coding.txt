@@ -1,0 +1,182 @@
+# ===============================
+# CAPSTONE PROJECT: CODE ARCHIVE
+# Author: Thi Thao Nguyen Dang (Sidney)
+# Date: September 1, 2025
+# ===============================
+
+# -------------------------------
+# 1. DATA WRANGLING & CLEANING
+# -------------------------------
+
+# Convert semicolon-separated fields into individual rows
+df['LanguageSplit'] = df['LanguageHaveWorkedWith'].str.split(';')
+df = df.explode('LanguageSplit')
+df['LanguageSplit'] = df['LanguageSplit'].str.strip()
+
+# Map age groups to numeric values
+age_map = {
+    'Under 18 years old': 16,
+    '18-24 years old': 21,
+    '25-34 years old': 30,
+    '35-44 years old': 40,
+    '45-54 years old': 50,
+    '55-64 years old': 60,
+    '65 years or older': 70
+}
+df['AgeNumeric'] = df['Age'].map(age_map)
+
+# Convert experience column to numeric
+df['YearsCodePro'] = pd.to_numeric(df['YearsCodePro'], errors='coerce')
+df['WorkExp'] = pd.to_numeric(df['WorkExp'], errors='coerce')
+
+# -------------------------------
+# 2. DISTRIBUTION VISUALIZATIONS
+# -------------------------------
+
+# Histogram of Converted Compensation
+sns.histplot(df['ConvertedCompYearly'].dropna(), bins=40, kde=True, color='skyblue')
+plt.title("Distribution of Converted Compensation")
+plt.xlabel("ConvertedCompYearly (USD)")
+plt.ylabel("Frequency")
+plt.show()
+
+# Box Plot of Age
+sns.boxplot(x=df['AgeNumeric'], color='salmon')
+plt.title("Box Plot of Age")
+plt.xlabel("Age")
+plt.show()
+
+# -------------------------------
+# 3. SCATTER & BUBBLE PLOTS
+# -------------------------------
+
+# Scatter Plot: Age vs Job Satisfaction
+sns.scatterplot(data=df, x='AgeNumeric', y='JobSatPoints_6', alpha=0.6)
+plt.title("Age vs Job Satisfaction")
+plt.xlabel("Age")
+plt.ylabel("Job Satisfaction")
+plt.show()
+
+# Bubble Plot: Compensation vs Job Satisfaction with Age as size
+sns.scatterplot(
+    data=df,
+    x='ConvertedCompYearly',
+    y='JobSatPoints_6',
+    size='AgeNumeric',
+    hue='AgeNumeric',
+    palette='viridis',
+    sizes=(50, 300),
+    alpha=0.6
+)
+plt.title("Compensation vs Job Satisfaction (Bubble Size = Age)")
+plt.xlabel("ConvertedCompYearly (USD)")
+plt.ylabel("Job Satisfaction")
+plt.show()
+
+# -------------------------------
+# 4. BAR CHARTS & STACKED CHARTS
+# -------------------------------
+
+# Horizontal Bar Chart: MainBranch Distribution
+df['MainBranch'].value_counts().plot(kind='barh', color='steelblue')
+plt.title("MainBranch Distribution")
+plt.xlabel("Number of Respondents")
+plt.ylabel("MainBranch")
+plt.show()
+
+# Vertical Bar Chart: Top 5 Languages Desired
+lang_series = df['LanguageWantToWorkWith'].dropna().str.split(';').explode().str.strip()
+top_langs = lang_series.value_counts().head(5)
+sns.barplot(x=top_langs.index, y=top_langs.values, palette='Set2')
+plt.title("Top 5 Programming Languages Desired")
+plt.xlabel("Language")
+plt.ylabel("Respondent Count")
+plt.show()
+
+# Stacked Bar Chart: Job Satisfaction by Age Group
+grouped = df.groupby('AgeNumeric')[['JobSatPoints_6', 'JobSatPoints_7']].median()
+grouped.plot(kind='bar', stacked=True, color=['mediumseagreen', 'darkgreen'])
+plt.title("Median Job Satisfaction by Age Group")
+plt.xlabel("Age")
+plt.ylabel("Median Satisfaction")
+plt.show()
+
+# -------------------------------
+# 5. LINE CHARTS FOR TRENDS
+# -------------------------------
+
+# Line Chart: Median Compensation by Age Group
+grouped = df.groupby('AgeNumeric')['ConvertedCompYearly'].median()
+sns.lineplot(x=grouped.index, y=grouped.values, marker='o', color='gold')
+plt.title("Median Compensation by Age Group")
+plt.xlabel("Age")
+plt.ylabel("Median Compensation (USD)")
+plt.show()
+
+# Line Chart: Job Satisfaction by Experience
+grouped = df.groupby('YearsCodePro')['JobSatPoints_6'].median()
+sns.lineplot(x=grouped.index, y=grouped.values, marker='o', color='mediumseagreen')
+plt.title("Job Satisfaction by Experience")
+plt.xlabel("Years of Experience")
+plt.ylabel("Median Satisfaction")
+plt.show()
+
+# -------------------------------
+# 6. GROUPED & FILTERED CHARTS
+# -------------------------------
+
+# Grouped Bar Chart: Median Compensation by Age
+grouped = df.groupby('AgeNumeric')['ConvertedCompYearly'].median()
+sns.barplot(x=grouped.index, y=grouped.values, palette='coolwarm')
+plt.title("Median Compensation by Age Group")
+plt.xlabel("Age")
+plt.ylabel("Median Compensation")
+plt.show()
+
+# Bar Chart: Respondent Count by Country
+country_counts = df['Country'].value_counts().head(10)
+sns.barplot(x=country_counts.index, y=country_counts.values, palette='Spectral')
+plt.title("Top 10 Countries by Respondent Count")
+plt.xlabel("Country")
+plt.ylabel("Respondents")
+plt.xticks(rotation=45)
+plt.show()
+
+# -------------------------------
+# 7. PIE CHARTS FOR COMPOSITION
+# -------------------------------
+
+# Pie Chart: Top 5 Databases Desired
+db_series = df['DatabaseWantToWorkWith'].dropna().str.split(';').explode().str.strip()
+top_dbs = db_series.value_counts().head(5)
+top_dbs.plot.pie(autopct='%1.1f%%', startangle=140, colors=sns.color_palette('pastel'))
+plt.title("Top 5 Desired Databases")
+plt.ylabel("")
+plt.show()
+
+# Pie Chart: Operating Systems Used Professionally
+os_counts = df['OpSysProfessionalUse'].dropna().value_counts()
+os_counts.plot.pie(autopct='%1.1f%%', startangle=140, colors=sns.color_palette('coolwarm'))
+plt.title("Operating Systems Used Professionally")
+plt.ylabel("")
+plt.show()
+
+# -------------------------------
+# 8. ADVANCED CHARTS (Cognos)
+# -------------------------------
+
+# Cognos dashboard panels included:
+# - Bar chart: Top 10 Languages Worked With
+# - Column chart: Top 10 Databases Worked With
+# - Word cloud: Top Platforms Worked With
+# - Hierarchy bubble chart: Top Web Frameworks Worked With
+
+# These were created using IBM Cognos Analytics with data transformations:
+# - Split semicolon-separated fields
+# - Flatten arrays into rows
+# - Count and rank top categories
+# - Apply filters and labels
+
+# -------------------------------
+# END OF CODE ARCHIVE
+# -------------------------------
