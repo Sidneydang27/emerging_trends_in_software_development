@@ -59,20 +59,25 @@ Capstone-Tech-Trends/
 
 ### 1. `current_tech_usage`  
 - Bar charts, word clouds, and bubble charts showing technologies respondents currently use
+![](images/current_tech_usage.png)
 
 ### 2. `database_trends`  
 - Comparative bar charts of databases worked with vs. desired next year  
 - Insights into relational vs. NoSQL adoption
+![](images/database_trends.png)
 
 ### 3. `demographics`  
 - Pie charts, maps, and line graphs showing gender, age, country, and education distributions
+![](images/demographics.png)
 
 ### 4. `future_tech_trend`  
 - Dashboards showing desired technologies for the upcoming year  
 - Includes programming languages, platforms, and web frameworks
+![](images/future_tech_trend.png)
 
 ### 5. `programming_language_trends`    
 - Horizontal bar charts comparing usage and desirability
+![](images/programming_language_trends.png)
 
 ---
 
