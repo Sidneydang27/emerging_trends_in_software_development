@@ -21,7 +21,7 @@ This project analyzes developer preferences, technology usage, and career priori
 Capstone-Tech-Trends/
 ```
 ├── data/
-│   └── survey_data_updated.csv │
+│   └── data_source.md │
 ├── images/│
 │   └── current_tech_usage.png │
 │   └── database_trends.png │
@@ -38,9 +38,9 @@ Capstone-Tech-Trends/
 ---
 
 ## 📊 Dataset  
-- **Primary Source**: Stack Overflow Developer Survey  
+- **Primary Source**: Stack Overflow Developer Survey, [survey_data_updated CSV](https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/VYPrOu0Vs3I0hKLLjiPGrA/survey-data-with-duplicate.csv)
 - **Supplementary Sources**: GitHub Jobs API, PromptCloud, IBM Skills Network  
-- **File Used**: `survey_data_updated.csv`  
+- See [`data/data_source.md`](data/data_source.md) for full details.
 - Contains responses on technologies used, desired tools, job satisfaction, compensation, and demographics.
 
 ---
